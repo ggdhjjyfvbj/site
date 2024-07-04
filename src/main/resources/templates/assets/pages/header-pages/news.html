@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+<div class="header">
+    <div class="header-setting">
+        <a href="/welcome" class="logoAndText">
+            <img src="/style/icons/trophy.png" width="64px">
+            <h1>Развитие спорта</h1>
+        </a>
+        <ul>
+            <li><a href="/welcome">О нас</a></li>
+            <li><a href="/news">Новости</a></li>
+            <li><a href="/forum">Форум</a></li>
+
+            <li><a sec:authorize="isAnonymous()"  href="/login">Авторизация</a></li>
+            <li><a sec:authorize="isFullyAuthenticated()" th:text="${authenticatedUser.getUsername()}"></a></li>
+        </ul>
+        <div id="lang-set">
+            <img src="/style/icons/down-arrow.png" width="16" style="margin-top: 4px; margin-right: 5px;">
+            <h1>Қаз</h1>
+            <div id="language-list">
+                <li><a href="kaz.html">Қазақша</a></li>
+                <li><a href="#">Русский</a></li>
+            </div>
+        </div>
+        <div sec:authorize="hasAnyAuthority('ADMIN', 'WRITER')">
+            <a style="text-decoration: none; font-family: 'Open Sans'; color: white" href="/create-news">Create-news</a>
+        </div>
+    </div>
+</div>
+<div class="news-container">
+    <div class="news-body">
+        <a style="text-decoration: none; color: black" th:if="${!news.isEmpty()}" th:href="@{/news/more(id=${lastNews.getId()})}" class="last-news">
+            <img th:src="@{'/imgs/' + ${lastNews.getFilename()}}" width="100%" height="350px">
+            <h1 class="title2" th:text="${lastNews.getTitle()}"></h1>
+            <p class="date" th:text="${#dates.format(lastNews.getDate(), 'dd MM yyyy HH:mm')}"></p>
+        </a>
+        <div class="searcher">
+            <form method="post" th:object="${entity}" th:action="@{/news/search}" class="forum-form">
+                <input type="text" th:field="*{title}" placeholder="search">
+                <button type="submit"></button>
+            </form>
+        </div>
+    </div>
+    <div class="last-newss">
+        <h1>Последние Новости</h1>
+        <div class="newwwws-container">
+            <div class="newwwws" th:each="newssigma : ${news}">
+                <a th:href="@{/news/more(id=${newssigma.getId()})}">
+                    <img th:src="@{'/imgs/' + ${newssigma.getFilename()}}" width="400px" height="272">
+                    <h1 class="title2" th:text="${newssigma.getTitle()}"></h1>
+                    <p class="date" th:text="${#dates.format(newssigma.getDate(), 'dd MM yyyy HH:mm')}"></p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/style/js/index.js"></script>
+</body>
+</html>

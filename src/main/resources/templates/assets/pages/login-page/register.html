@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+<div class="header">
+    <div class="header-setting">
+        <a href="/welcome" class="logoAndText">
+            <img src="/style/icons/trophy.png" width="64px">
+            <h1>Развитие спорта</h1>
+        </a>
+        <ul>
+            <li><a href="/welcome">О нас</a></li>
+            <li><a href="/news">Новости</a></li>
+            <li><a href="/forum">Форум</a></li>
+            <li><a sec:authorize="isAnonymous()"  href="/login">Авторизация</a></li>
+            <li><a sec:authorize="isFullyAuthenticated()" th:text="${authenticatedUser.getUsername()}"></a></li>
+        </ul>
+        <div id="lang-set">
+            <img src="/style/icons/down-arrow.png" width="16" style="margin-top: 4px; margin-right: 5px;">
+            <h1>Қаз</h1>
+            <div id="language-list">
+                <li><a href="kaz.html">Қазақша</a></li>
+                <li><a href="#">Русский</a></li>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="form-container" method="post" th:object="${user}">
+    <h1>Please Sign up</h1>
+    <input th:field="*{email}" type="email" placeholder="email">
+    <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></label>
+
+    <input th:field="*{login}" type="text" placeholder="login">
+    <label th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></label>
+
+    <input th:field="*{password}" type="password" placeholder="password">
+    <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></label>
+
+    <input th:field="*{confirmPassword}" type="password" placeholder="confirmPassword" name="confirmPassword">
+    <label th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></label>
+
+    <input th:field="*{date}" type="date" name="date" placeholder="dateOfBirth">
+    <label th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></label>
+
+    <a href="/login">
+        <button type="button">Login</button>
+    </a>
+    <button type="submit">Register</button>
+</form>
+<script src="/style/js/index.js"></script>
+</body>
+</html>

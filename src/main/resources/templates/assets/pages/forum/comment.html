@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+<div class="header">
+    <div class="header-setting">
+        <a href="/welcome" class="logoAndText">
+            <img src="/style/icons/trophy.png" width="64px">
+            <h1>Развитие спорта</h1>
+        </a>
+        <ul>
+            <li><a href="/welcome">О нас</a></li>
+            <li><a href="/news">Новости</a></li>
+            <li><a href="/forum">Форум</a></li>
+            <li><a sec:authorize="isAnonymous()"  href="/login">Авторизация</a></li>
+            <li><a sec:authorize="isFullyAuthenticated()" th:text="${authenticatedUser.getUsername()}"></a></li>
+        </ul>
+        <div id="lang-set">
+            <img src="/style/icons/down-arrow.png" width="16" style="margin-top: 4px; margin-right: 5px;">
+            <h1>Қаз</h1>
+            <div id="language-list">
+                <li><a href="kaz.html">Қазақша</a></li>
+                <li><a href="#">Русский</a></li>
+            </div>
+        </div>
+        <div sec:authorize="hasAnyAuthority('ADMIN', 'WRITER')">
+            <a style="text-decoration: none; font-family: 'Open Sans'; color: white" href="/create-news">Create-news</a>
+        </div>
+    </div>
+</div>
+    <div class="watch-forum">
+        <div class="forum-answer">
+            <div class="urser">
+                <img src="/style/icons" class="ava" width="32px" height="32px">
+                <div class="nicknameOfAuthorAndDate">
+                    <a class="nickname" th:text="${comment.getUserEntity().getUsername()}"></a>
+                    <a th:text="${#dates.format(comment.getDate(), 'dd.MM.yyyy')}"></a>
+                </div>
+            </div>
+            <div class="forum-Title">
+                <a th:text="${comment.getCategory().name()}"></a>
+                <h1 th:text="${comment.getTitle()}"></h1>
+            </div>
+            <div class="buttons">
+                <ul>
+                    <li style="margin-left: 5px;"><a>Like: </a></li>
+                    <li><a href="#">Comment: </a></li>
+                    <li><a href="#">Favorite: </a></li>
+                </ul>
+            </div>
+            <div class="comments" th:each="commentss : ${forumComment}">
+                <p th:text="@{${commentss.getUser().getUsername()} + ': ' + ${commentss.getContent()}}"></p>
+            </div>
+            <form method="post" class="comment">
+                <textarea name="content" placeholder="коммент"></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/style/js/stomppp.js"><</script>
+</body>
+</html>
